@@ -2,6 +2,8 @@ package com.dvlcube.utils.interfaces;
 
 import java.io.Serializable;
 
+import org.springframework.hateoas.Identifiable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -19,4 +21,6 @@ public interface MxBean<S extends Serializable> extends Identifiable<S> {
 	 * @author Ulisses Lima
 	 */
 	S getId();
+
+	Object autocompleteField();
 }

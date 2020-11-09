@@ -1,7 +1,5 @@
 package com.dvlcube.app.rest;
 
-import static com.dvlcube.utils.query.MxQuery.$;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -36,7 +34,7 @@ public class FileService implements MxService {
 	@GetMapping("download")
 	public ResponseEntity<InputStreamResource> getDownload(@RequestParam String path,
 			@RequestParam(required = false) Boolean zip) throws IOException {
-		if ($(path).isBlank())
+		if ((path).isBlank())
 			throw new IllegalArgumentException("path param must not be blank");
 
 		File file = new File(path);

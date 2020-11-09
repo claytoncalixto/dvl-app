@@ -1,7 +1,6 @@
 package com.dvlcube.app.jpa;
 
-import static com.dvlcube.utils.query.MxQuery.$;
-
+import java.awt.Composite;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,9 +25,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dvlcube.utils.MxStringUtils;
 import com.dvlcube.utils.annotations.sql.Like;
-import com.dvlcube.utils.interfaces.CompositeId;
 import com.dvlcube.utils.interfaces.MxBean;
 
 /**
@@ -114,7 +111,7 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 		for (T i : all) {
 			if (search == null || MxStringUtils.containsIgnoreCase(i.autocompleteField(), search)) {
 				if (test == null || test.test(i))
-					map.put(i.autocompleteField(), null);
+					map.put((String) i.autocompleteField(), null);
 			}
 		}
 		return map;
@@ -128,7 +125,7 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 	@Override
 	public List<T> findAllByToggles(HttpHeaders headers, Map<String, String> params) {
 		Class<T> type = ei.getJavaType();
-		final String togglePrefix = DVL_TOGGLE_HEADER_PREFIX + "-" + $(type).shortBeanName() + ".";
+		final String togglePrefix = DVL_TOGGLE_HEADER_PREFIX + "-" + (type).getName() + ".";
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<T> q = cb.createQuery(type);
@@ -158,7 +155,7 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 
 	@Override
 	public List<T> findAllLike(String id) {
-		if ($(id).isBlank())
+		if ((id).isBlank())
 			return firstPage();
 
 		id = id.toLowerCase();
@@ -190,7 +187,7 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 
 	@Override
 	public List<T> findAllBy(Map<String, String> params, String group) {
-		int lidvl = Optional.ofNullable($(params.remove("lidvl")).i()).orElse(DEFAULT_PAGE_SIZE * 5);
+		Object lidvl = Optional.ofNullable(((Optional) $(params.remove("lidvl"))).orElseThrow());
 
 		Class<T> type = ei.getJavaType();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -207,7 +204,7 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 					x = x.get(path[i]);
 				}
 			}
-			predicates.add(cb.equal(x, $(val).guess()));
+			predicates.add(cb.equal(x, ((Object) $(val)).equals(x)));
 		});
 
 		q.where(cb.and(predicates.toArray(new javax.persistence.criteria.Predicate[predicates.size()])));
@@ -234,7 +231,12 @@ public class DvlJpaRepository<T extends MxBean<? extends Serializable>, ID exten
 
 		log.trace(q);
 		// TODO @performance(ulisses) handle lidvl/pagination
-		return em.createQuery(q.select(props)).setMaxResults(lidvl).getResultList();
+		return em.createQuery(q.select(props)).setMaxResults((int) lidvl).getResultList();
+	}
+
+	private Object $(String remove) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

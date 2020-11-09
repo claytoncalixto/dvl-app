@@ -42,11 +42,13 @@ public class SkillService implements MxFilterableBeanService<SkillBean, Long> {
 		return repo.firstPage();
 	}
 
-	@Override
 	@GetMapping("/{id}")
-	public Optional<SkillBean> get(@PathVariable Long id) {
-		return repo.findById(id);
+	public Optional<SkillBean> get( @PathVariable String name) {
+		return repo.findAll(name);
 	}
+	
+	
+	
 
 	@Override
 	@PostMapping
@@ -78,9 +80,10 @@ public class SkillService implements MxFilterableBeanService<SkillBean, Long> {
 		return repo.findAllBy(params, group);
 	}
 
+	//corrigir GET /skills/like para filtrar por nome
 	@GetMapping("/like")
-	public Iterable<SkillBean> getLike(@RequestParam(required = true) String id) {
-		return repo.findAllLike(id);
+	public Iterable<SkillBean> getLike(@RequestParam(required = true) String name) {
+		return repo.findAllLike(name);
 	}
 
 	@DeleteMapping("/{id}")

@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dvlcube.app.interfaces.MenuItem;
-import com.dvlcube.utils.aspects.stats.Stat;
-import com.dvlcube.utils.aspects.stats.Stats;
 import com.dvlcube.utils.interfaces.MxService;
 
 /**
@@ -40,8 +38,8 @@ public class StatService implements MxService {
 	 * @author Ulisses Lima
 	 */
 	@GetMapping
-	public List<Stat> get(@RequestParam Map<String, String> params) {
-		return Stats.values();
+	public List<Stats> get(@RequestParam Map<String, String> params) {
+		return Stats.values(params);
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class StatService implements MxService {
 	 * @author Ulisses Lima
 	 */
 	@DeleteMapping
-	public List<Stat> delete(@RequestParam Map<String, String> params) {
+	public List<Stats> delete(@RequestParam Map<String, String> params) {
 		Stats.consume(item -> log.info("removing {}", item));
 		return get(params);
 	}
@@ -63,8 +61,8 @@ public class StatService implements MxService {
 	 * @author Ulisses Lima
 	 */
 	@GetMapping("/{id}")
-	public Stat get(@PathVariable String id) {
-		return $(Stats.values()).filterOne(stat -> stat.getAction().equals(id));
+	public Stats get(@PathVariable String id) {
+		return ((Object) Stats.values()).filterOne(stat -> stat.getAction().equals(id));
 	}
 
 	/**

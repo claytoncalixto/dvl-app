@@ -96,4 +96,10 @@ public class BagBean implements Owned, MxBean<Long>, Nameable, Presentable {
 	public void setPic(String pic) {
 		this.pic = pic;
 	}
+
+	@Override
+	public Object autocompleteField() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

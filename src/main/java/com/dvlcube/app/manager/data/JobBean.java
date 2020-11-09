@@ -3,6 +3,8 @@ package com.dvlcube.app.manager.data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.dvlcube.utils.interfaces.MxBean;
 import com.dvlcube.utils.interfaces.Nameable;
 
@@ -11,6 +13,8 @@ import com.dvlcube.utils.interfaces.Nameable;
  * @author Ulisses Lima
  */
 @Entity
+//mapear para /jobs
+@RequestMapping("${/jobs}")
 public class JobBean implements MxBean<Long>, Nameable {
 	private static final long serialVersionUID = 1L;
 
@@ -41,5 +45,10 @@ public class JobBean implements MxBean<Long>, Nameable {
 
 	public void setMax(Integer max) {
 		this.max = max;
+	}
+
+	@Override
+	public Object autocompleteField() {
+		return null;
 	}
 }
